@@ -1,0 +1,16 @@
+{
+  "name": "MailChimp API Wrapper Example",
+  "version": "1.0",
+  "description": "Demonstrates use of the JavaScript MailChimp API Wrapper",
+  "icons": {
+    "128": "icon128.png"
+  },
+  "browser_action": {
+    "default_title": "MailChimp API Wrapper",
+    "default_icon": "icon128.png",
+    "popup": "example.html"
+  },
+  "permissions": [
+    "https://*.api.mailchimp.com/"
+  ]
+}

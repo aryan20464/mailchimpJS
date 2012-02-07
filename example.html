@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <script src="jquery.js"></script>
+        <script src="mailchimp_wrapper.js"></script>
+        <script>
+
+            // Your personal API key
+            // Use only for testing and keep this private
+            var mailChimpAPIKey = "";
+
+            // Initialize a new MailChimp API Wrapper object
+            mc = new MailChimpAPI(mailChimpAPIKey, function(response) {
+
+                if(response.success) {
+
+                    // Read all the lists a user has
+                    mc.readLists( function(response) {
+                        console.log("Reading lists...");
+                        log(response);
+                        listId = response.object[0].ID;
+
+                        // Create and delete groups
+                        mc.createGroup(listId,"Location","Middle Coast", function(response) {
+                            console.log("Creating group...");
+                            log(response);
+
+                            if(response.success) {
+                                mc.deleteGroup(listId,"Location","Middle Coast", function(response) {
+                                    console.log("Deleting group...");
+                                    log(response);
+                                });
+                            }
+                        });
+
+                        // Add a new contact
+                        var contact = {Email:"test@ecquire.com",Phone:"345-456-789","Other Field":"test",Groups:""};
+                        contact.Groups = { "Location":["East Coast", "West Coast"] };
+                        mc.createContact(listId, contact, function(response) {
+                            console.log("Creating contact...");
+                            log(response);
+
+                            // Delete the contact we just added
+                            mc.deleteContact(listId,"test@ecquire.com",function(response) {
+                                console.log("Deleting contact...");
+                                log(response);
+                            });
+                        });
+
+                        // Read all contacts
+                        mc.readContacts(listId, function(response) {
+                            console.log("Reading contacts...");
+                            log(response);
+                        });
+
+                        // Read a specific contact
+                        blankContact = {Email:"test2@ecquire.com",Phone:"",Groups:""};
+                        mc.readContact(listId,blankContact,function(response) {
+                            console.log("Reading contact...");
+                            log(response);
+                        });
+
+                    });
+                }
+            });
+
+            function log(s) {
+                console.log(JSON.stringify(s,null,' '));
+            }
+
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
